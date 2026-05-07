@@ -14,6 +14,24 @@
     </div>
   </div>
 
+  <!-- Date filter -->
+  <div class="section-card filter-card">
+    <form method="GET" action="{{ url_for('profile') }}" class="filter-row">
+      <div class="filter-presets">
+        <a href="{{ url_for('profile') }}" class="filter-preset{% if not date_from %} filter-preset--active{% endif %}">All Time</a>
+        <a href="{{ presets.this_month }}" class="filter-preset">This Month</a>
+        <a href="{{ presets.last_3_months }}" class="filter-preset">Last 3 Months</a>
+        <a href="{{ presets.last_6_months }}" class="filter-preset">Last 6 Months</a>
+      </div>
+      <div class="filter-range">
+        <input type="date" id="from" name="from" class="filter-date-input" value="{{ date_from or '' }}">
+        <span class="filter-to-sep">to</span>
+        <input type="date" id="to" name="to" class="filter-date-input" value="{{ date_to or '' }}">
+        <button type="submit" class="filter-apply-btn">Apply</button>
+      </div>
+    </form>
+  </div>
+
   <!-- Stat cards -->
   <div class="profile-stats-row">
     <div class="stat-card">
@@ -34,7 +52,7 @@
   <div class="profile-body">
 
     <div class="section-card">
-      <h2 class="section-title">Recent Transactions</h2>
+      <h2 class="section-title">{% if date_from and date_to %}Transactions{% else %}Recent Transactions{% endif %}</h2>
       {% if transactions %}
       <table class="tx-table">
         <thead>
