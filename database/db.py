@@ -12,6 +12,17 @@ def get_db():
     return conn
 
 
+def build_date_filter(user_id, date_from=None, date_to=None):
+    """Return (where_clause, params) for expense queries with optional date range."""
+    conditions = ["user_id = ?"]
+    params     = [user_id]
+    if date_from and date_to:
+        conditions.append("date >= ?")
+        conditions.append("date <= ?")
+        params += [date_from, date_to]
+    return " AND ".join(conditions), params
+
+
 def init_db():
     conn = get_db()
     conn.executescript("""

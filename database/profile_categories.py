@@ -1,13 +1,16 @@
-def get_categories(db, user_id):
+from database.db import build_date_filter
+
+
+def get_categories(db, user_id, date_from=None, date_to=None):
+    where, params = build_date_filter(user_id, date_from, date_to)
+
     rows = db.execute(
-        """
-        SELECT   category, SUM(amount) AS cat_total
-        FROM     expenses
-        WHERE    user_id = ?
-        GROUP BY category
-        ORDER BY cat_total DESC
-        """,
-        (user_id,),
+        "SELECT category, SUM(amount) AS cat_total"
+        " FROM expenses"
+        " WHERE " + where +
+        " GROUP BY category"
+        " ORDER BY cat_total DESC",
+        params,
     ).fetchall()
 
     if not rows:

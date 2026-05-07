@@ -1,24 +1,24 @@
-def get_stats(db, user_id):
+from database.db import build_date_filter
+
+
+def get_stats(db, user_id, date_from=None, date_to=None):
+    where, params = build_date_filter(user_id, date_from, date_to)
+
     totals = db.execute(
-        """
-        SELECT COALESCE(SUM(amount), 0) AS total_spent,
-               COUNT(*)                 AS transaction_count
-        FROM   expenses
-        WHERE  user_id = ?
-        """,
-        (user_id,),
+        "SELECT COALESCE(SUM(amount), 0) AS total_spent, COUNT(*) AS transaction_count"
+        " FROM expenses"
+        " WHERE " + where,
+        params,
     ).fetchone()
 
     top_row = db.execute(
-        """
-        SELECT   category, SUM(amount) AS cat_total
-        FROM     expenses
-        WHERE    user_id = ?
-        GROUP BY category
-        ORDER BY cat_total DESC
-        LIMIT    1
-        """,
-        (user_id,),
+        "SELECT category, SUM(amount) AS cat_total"
+        " FROM expenses"
+        " WHERE " + where +
+        " GROUP BY category"
+        " ORDER BY cat_total DESC"
+        " LIMIT 1",
+        params,
     ).fetchone()
 
     return {
