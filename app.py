@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import sqlite3
+from datetime import datetime
 from database.db import get_db, init_db, seed_db
+from database.profile_transactions import get_transactions
+from database.profile_stats        import get_stats
+from database.profile_categories   import get_categories
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -106,38 +110,51 @@ def profile():
     if not session.get("user_id"):
         return redirect(url_for("login"))
 
-    user = {
-        "name": "Demo User",
-        "email": "demo@spendly.com",
-        "initials": "DU",
-        "member_since": "15 Jan 2025",
-    }
-    stats = {
-        "total_spent": "₹12,450.75",
-        "transaction_count": 8,
-        "top_category": "Food",
-    }
-    transactions = [
-        {"date": "12 Apr 2025", "description": "Groceries",          "category": "Food",          "amount": "₹850.00"},
-        {"date": "11 Apr 2025", "description": "Metro card recharge", "category": "Transport",     "amount": "₹500.00"},
-        {"date": "10 Apr 2025", "description": "Electricity bill",    "category": "Bills",         "amount": "₹2,200.00"},
-        {"date": "09 Apr 2025", "description": "Doctor visit",        "category": "Health",        "amount": "₹800.00"},
-        {"date": "08 Apr 2025", "description": "Movie tickets",       "category": "Entertainment", "amount": "₹1,150.00"},
-        {"date": "05 Apr 2025", "description": "New clothing",        "category": "Shopping",      "amount": "₹3,200.00"},
-        {"date": "03 Apr 2025", "description": "Miscellaneous",       "category": "Other",         "amount": "₹2,801.75"},
-        {"date": "01 Apr 2025", "description": "Grocery shopping",    "category": "Food",          "amount": "₹949.00"},
-    ]
-    categories = [
-        {"name": "Shopping",      "amount": "₹3,200.00", "pct": 100},
-        {"name": "Other",         "amount": "₹2,801.75", "pct": 88},
-        {"name": "Food",          "amount": "₹2,300.00", "pct": 72},
-        {"name": "Bills",         "amount": "₹2,200.00", "pct": 69},
-        {"name": "Entertainment", "amount": "₹1,150.00", "pct": 36},
-        {"name": "Health",        "amount": "₹800.00",   "pct": 25},
-        {"name": "Transport",     "amount": "₹500.00",   "pct": 16},
-    ]
-    return render_template("profile.html", user=user, stats=stats,
-                           transactions=transactions, categories=categories)
+    user_id = session["user_id"]
+    db      = get_db()
+
+    try:
+        row = db.execute(
+            "SELECT name, email, created_at FROM users WHERE id = ?",
+            (user_id,),
+        ).fetchone()
+
+        if row is None:
+            session.clear()
+            flash("Session expired. Please sign in again.", "error")
+            return redirect(url_for("login"))
+
+        try:
+            member_since = datetime.strptime(
+                row["created_at"][:10], "%Y-%m-%d"
+            ).strftime("%d %b %Y")
+        except (ValueError, TypeError):
+            member_since = "Unknown"
+
+        name = row["name"]
+        initials = "".join(part[0].upper() for part in name.split() if part)[:2]
+
+        user = {
+            "name":         name,
+            "email":        row["email"],
+            "initials":     initials,
+            "member_since": member_since,
+        }
+
+        transactions = get_transactions(db, user_id)
+        stats        = get_stats(db, user_id)
+        categories   = get_categories(db, user_id)
+
+    finally:
+        db.close()
+
+    return render_template(
+        "profile.html",
+        user=user,
+        stats=stats,
+        transactions=transactions,
+        categories=categories,
+    )
 
 
 @app.route("/expenses/add")

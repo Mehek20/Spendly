@@ -35,6 +35,7 @@
 
     <div class="section-card">
       <h2 class="section-title">Recent Transactions</h2>
+      {% if transactions %}
       <table class="tx-table">
         <thead>
           <tr>
@@ -55,10 +56,14 @@
           {% endfor %}
         </tbody>
       </table>
+      {% else %}
+      <p class="tx-empty">No transactions yet. Add your first expense to get started.</p>
+      {% endif %}
     </div>
 
     <div class="section-card">
       <h2 class="section-title">By Category</h2>
+      {% if categories %}
       <div class="breakdown-list">
         {% for cat in categories %}
         <div class="breakdown-row">
@@ -72,6 +77,9 @@
         </div>
         {% endfor %}
       </div>
+      {% else %}
+      <p class="tx-empty">No category data yet.</p>
+      {% endif %}
     </div>
 
   </div>
