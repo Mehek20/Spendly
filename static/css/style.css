@@ -976,6 +976,167 @@ a { color: inherit; text-decoration: none; }
 }
 .filter-apply-btn:hover { opacity: 0.85; }
 
+/* ------------------------------------------------------------------ */
+/* Navbar active link                                                  */
+/* ------------------------------------------------------------------ */
+
+.nav-link--active {
+    color: var(--accent) !important;
+    font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ */
+/* Analytics — Coming Soon page                                        */
+/* ------------------------------------------------------------------ */
+
+.coming-soon-page {
+    min-height: calc(100vh - 60px - 100px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 2rem;
+    background: #f5f5f5;
+    position: relative;
+    overflow: hidden;
+}
+
+.coming-soon-bg-blob {
+    position: absolute;
+    width: 384px;
+    height: 384px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.05;
+    filter: blur(64px);
+    pointer-events: none;
+}
+
+.coming-soon-bg-blob--tl { top: -192px; left: -192px; }
+.coming-soon-bg-blob--br { bottom: -192px; right: -192px; }
+
+.coming-soon-card {
+    position: relative;
+    background: var(--paper-card);
+    border: 1px solid var(--border-soft);
+    border-radius: 24px;
+    padding: 2.5rem 3rem 2.75rem;
+    width: 100%;
+    max-width: 512px;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1), 0 8px 20px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+
+.coming-soon-corner {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--accent) 0%, transparent 100%);
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.coming-soon-corner--tr { top: 0; right: 0; border-bottom-left-radius: 9999px; }
+.coming-soon-corner--bl { bottom: 0; left: 0; border-top-right-radius: 9999px; }
+
+.coming-soon-icon-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.coming-soon-icon-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.2;
+    filter: blur(24px);
+}
+
+.coming-soon-icon-box {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--accent) 0%, #1a3a28 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15), 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.coming-soon-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.1rem;
+    border-radius: 9999px;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.coming-soon-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    color: var(--accent);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.coming-soon-subtitle {
+    font-size: 0.975rem;
+    color: var(--ink-muted);
+    line-height: 1.7;
+    max-width: 380px;
+    margin: 0 auto 1.75rem;
+}
+
+.coming-soon-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.coming-soon-dot {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.coming-soon-dot--1 { opacity: 0.63; }
+.coming-soon-dot--2 { opacity: 0.52; }
+.coming-soon-dot--3 { opacity: 0.4; }
+
+.coming-soon-caption {
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+}
+
+.coming-soon-line {
+    width: 128px;
+    height: 4px;
+    margin: 0 auto;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+    opacity: 0.3;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .profile-stats-row        { grid-template-columns: 1fr; }
