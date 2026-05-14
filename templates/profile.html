@@ -52,7 +52,10 @@
   <div class="profile-body">
 
     <div class="section-card">
-      <h2 class="section-title">{% if date_from and date_to %}Transactions{% else %}Recent Transactions{% endif %}</h2>
+      <div class="section-title-row">
+        <h2 class="section-title">{% if date_from and date_to %}Transactions{% else %}Recent Transactions{% endif %}</h2>
+        <a href="{{ url_for('add_expense') }}" class="btn-add-expense">+ Add Expense</a>
+      </div>
       {% if transactions %}
       <table class="tx-table">
         <thead>
